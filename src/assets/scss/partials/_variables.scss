@@ -1,0 +1,36 @@
+$xxl: 1399.98px;
+$xl: 1199.98px;
+$lg: 991.98px;
+$md: 767.98px;
+$sm: 575.98px;
+
+// Colors
+$black: #141414;
+$dark: #0c0c0c;
+$text-gray: #b3b3b3;
+$white: #eaeaea;
+$red: #f33f3f;
+$purple: #fa4776;
+$bg-black: #141414;
+$bg-dark: #1f1f1f;
+$text-dark: #eaeaea;
+
+:root {
+  --container: 1300px;
+
+  @media (max-width: $xl) {
+    --container: 960px;
+  }
+
+  @media (max-width: $lg) {
+    --container: 720px;
+  }
+
+  @media (max-width: $md) {
+    --container: 540px;
+  }
+
+  @media (max-width: $sm) {
+    --container: 100%;
+  }
+}

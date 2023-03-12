@@ -1,0 +1,32 @@
+@use '../partials/mixins' as mix;
+@use '../partials/variables' as vars;
+
+html,
+body {
+  @include mix.p-16;
+
+  color: vars.$text-dark;
+  background: vars.$bg-dark;
+}
+
+input {
+  width: 100%;
+  padding: 8px 12px;
+  color: vars.$white;
+  border: 1px solid rgba(vars.$white, 0.4);
+  border-radius: 12px;
+  transition: border-color 0.3s ease-in-out, color 0.3s ease-in-out;
+
+  &:hover,
+  &:focus-visible,
+  &::placeholder {
+    border-color: vars.$white;
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 15px;
+}

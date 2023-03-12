@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss",
+    "stylelint-config-recommended-vue/scss",
+    "stylelint-config-rational-order",
+    "stylelint-config-prettier-scss",
+    "stylelint-prettier"
+  ],
+  "ignoreFiles": ["**/*", "!src/**/*"],
+  "rules": {
+    "no-descending-specificity": null,
+    "scss/no-global-function-names": null,
+    "selector-class-pattern": null,
+    "color-function-notation": null
+  }
+}
