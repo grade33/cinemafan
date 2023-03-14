@@ -1,5 +1,5 @@
 <template>
-  <div class="poster-list">
+  <div class="promo">
     <Swiper
       :modules="modules"
       :autoplay="{
@@ -8,27 +8,26 @@
       }"
       :pagination="{
         clickable: true,
-        el: '.poster-list__pagination',
-        bulletClass: 'poster-list__pagination-bullet',
-        bulletActiveClass: 'poster-list__pagination-bullet_active',
+        el: '.promo__pagination',
+        bulletClass: 'promo__pagination-bullet',
+        bulletActiveClass: 'promo__pagination-bullet_active',
       }"
-      :loop="true"
       :slides-per-view="1"
       :space-between="20"
       :speed="1500"
       :simulate-touch="false"
       watch-slides-progress
-      class="poster-list__slider"
+      class="promo__slider"
     >
       <SwiperSlide
-        v-for="mediaItem in mediaList"
-        :key="mediaItem.id"
-        class="poster-list__item"
+        v-for="promoItem in promoData"
+        :key="promoItem.id"
+        class="promo__item"
       >
-        <PosterItem :media-item="mediaItem" />
+        <PromoItem :media-item="promoItem" />
       </SwiperSlide>
 
-      <div class="poster-list__pagination"></div>
+      <div class="promo__pagination"></div>
     </Swiper>
   </div>
 </template>
@@ -39,45 +38,24 @@ import { Autoplay, Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import {
-  getMovieWithId,
-  getTvWithId,
-  normalizePosterMovie,
-  normalizePosterTv,
-} from '../api/api';
+import PromoItem from './PromoItem.vue';
 
-import PosterItem from './PosterItem.vue';
+import { mapState } from 'pinia';
+import { useDataStore } from '@/stores/data.js';
 
 export default {
   components: {
     Swiper,
     SwiperSlide,
-    PosterItem,
-  },
-  props: {
-    mediaIdList: {
-      type: Array,
-      default: () => [],
-    },
+    PromoItem,
   },
   data() {
     return {
-      mediaList: [],
       modules: [Pagination, Autoplay],
     };
   },
-  created() {
-    this.mediaIdList.movie.forEach(async (id) => {
-      const rawMovie = await getMovieWithId(id);
-      const movie = normalizePosterMovie(rawMovie);
-      this.mediaList.push(movie);
-    });
-
-    this.mediaIdList.tv.forEach(async (id) => {
-      const rawTv = await getTvWithId(id);
-      const tv = normalizePosterTv(rawTv);
-      this.mediaList.push(tv);
-    });
+  computed: {
+    ...mapState(useDataStore, ['promoData']),
   },
 };
 </script>
@@ -86,7 +64,7 @@ export default {
 @use '@/assets/scss/partials/variables' as vars;
 @use '@/assets/scss/partials/mixins' as mix;
 
-.poster-list {
+.promo {
   position: relative;
 
   &__pagination {
@@ -98,7 +76,7 @@ export default {
     width: fit-content;
     transform: translateX(-50%);
 
-    :deep(.poster-list__pagination-bullet) {
+    :deep(.promo__pagination-bullet) {
       display: block;
       width: 10px;
       height: 10px;
@@ -108,7 +86,7 @@ export default {
       cursor: pointer;
     }
 
-    :deep(.poster-list__pagination-bullet_active) {
+    :deep(.promo__pagination-bullet_active) {
       background-color: vars.$white;
     }
   }

@@ -1,6 +1,16 @@
 <template>
   <RouterLink to="/" class="media-item">
     <div class="media-item__img-block">
+      <span
+        v-if="mediaItem.rating"
+        :class="{
+          'media-item__rating_green': normalizedRating >= 7,
+          'media-item__rating_red': normalizedRating < 5,
+        }"
+        class="media-item__rating"
+      >
+        {{ normalizedRating }}
+      </span>
       <img
         class="media-item__img"
         :src="mediaItem.posterPath"
@@ -24,7 +34,11 @@ export default {
     mediaItem: {
       type: Object,
       required: true,
-      default: () => {},
+    },
+  },
+  computed: {
+    normalizedRating() {
+      return this.mediaItem.rating.toFixed(1);
     },
   },
 };
@@ -70,8 +84,28 @@ export default {
     }
   }
 
+  &__rating {
+    @include mix.p-14;
+
+    position: absolute;
+    top: 7px;
+    left: 7px;
+    z-index: 5;
+    display: inline-block;
+    padding: 1px 6px;
+    background: #808080;
+    border-radius: 5px;
+
+    &_green {
+      background: #007b00;
+    }
+
+    &_red {
+      background: #ff0b0b;
+    }
+  }
+
   &__img {
-    height: 289px;
     border-radius: 16px;
   }
 

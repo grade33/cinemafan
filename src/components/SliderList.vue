@@ -20,7 +20,7 @@
         :key="mediaItem.id"
         class="slider__item"
       >
-        <SliderItem :media-item="mediaItem" />
+        <MediaItem :media-item="mediaItem" />
       </SwiperSlide>
       <button class="slider__btn slider__btn_prev">
         <ArrowRightIcon class="slider__btn-icon" />
@@ -39,14 +39,14 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 import ArrowRightIcon from '@/components/icons/ArrowRightIcon.vue';
-import SliderItem from '@/components/SliderItem.vue';
+import MediaItem from '@/components/MediaItem.vue';
 
 export default {
   components: {
     ArrowRightIcon,
     Swiper,
     SwiperSlide,
-    SliderItem,
+    MediaItem,
   },
   props: {
     title: {
@@ -56,7 +56,6 @@ export default {
     mediaList: {
       type: Array,
       required: true,
-      default: () => [],
     },
   },
   data() {

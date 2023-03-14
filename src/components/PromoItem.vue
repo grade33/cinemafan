@@ -1,33 +1,33 @@
 <template>
-  <RouterLink to="/" class="poster-item">
-    <div class="poster-item__content">
-      <div class="poster-item__name-block">
-        <strong class="poster-item__name">{{ mediaItem.name }}</strong>
-        <p class="poster-item__overview">{{ mediaItem.overview }}</p>
+  <RouterLink to="/" class="promo-item">
+    <div class="promo-item__content">
+      <div class="promo-item__name-block">
+        <strong class="promo-item__name">{{ mediaItem.name }}</strong>
+        <p class="promo-item__overview">{{ mediaItem.overview }}</p>
       </div>
-      <ul class="poster-item__structure">
-        <li class="poster-item__structure-item">
-          <span class="poster-item__structure-name">Genre: </span>
-          <span class="poster-item__structure-content">{{
-            mediaItem.genres
-          }}</span>
+      <ul class="promo-item__structure">
+        <li class="promo-item__structure-item">
+          <span class="promo-item__structure-name">Cast: </span>
+          <span class="promo-item__structure-content">
+            {{ mediaItem.cast }}
+          </span>
         </li>
-        <li class="poster-item__structure-item">
-          <span class="poster-item__structure-name">Directed By: </span>
-          <span class="poster-item__structure-content">{{
-            mediaItem.director
-          }}</span>
+        <li class="promo-item__structure-item">
+          <span class="promo-item__structure-name">Directed By: </span>
+          <span class="promo-item__structure-content">
+            {{ mediaItem.director }}
+          </span>
         </li>
-        <li class="poster-item__structure-item">
-          <span class="poster-item__structure-name">Cast: </span>
-          <span class="poster-item__structure-content">{{
-            mediaItem.cast
-          }}</span>
+        <li class="promo-item__structure-item">
+          <span class="promo-item__structure-name">Genre: </span>
+          <span class="promo-item__structure-content">
+            {{ mediaItem.genres }}
+          </span>
         </li>
       </ul>
     </div>
-    <div class="poster-item__img-wrap">
-      <img class="poster-item__img" :src="mediaItem.backdropPath" alt="" />
+    <div class="promo-item__img-block">
+      <img class="promo-item__img" :src="mediaItem.backdropPath" alt="" />
     </div>
   </RouterLink>
 </template>
@@ -37,10 +37,9 @@ export default {
   props: {
     mediaItem: {
       type: Object,
-      default: () => {},
+      required: true,
     },
   },
-  created() {},
 };
 </script>
 
@@ -48,7 +47,7 @@ export default {
 @use '@/assets/scss/partials/variables' as vars;
 @use '@/assets/scss/partials/mixins' as mix;
 
-.poster-item {
+.promo-item {
   position: relative;
   display: flex;
   overflow: hidden;
@@ -64,7 +63,6 @@ export default {
     background-image: linear-gradient(
       90deg,
       vars.$dark 45%,
-      rgba(vars.$dark, 0.99) 50%,
       rgba(vars.$dark, 0) 100%
     );
     content: '';
@@ -79,7 +77,7 @@ export default {
     gap: 20px;
     width: 45%;
     min-height: 450px;
-    padding: 30px 0 45px 40px;
+    padding: 45px 15px 45px 45px;
     background: vars.$dark;
   }
 
@@ -118,7 +116,7 @@ export default {
     }
   }
 
-  &__img-wrap {
+  &__img-block {
     margin-left: auto;
   }
 
