@@ -2,7 +2,7 @@
   <RouterLink to="/" class="media-item">
     <div class="media-item__img-block">
       <span
-        v-if="mediaItem.rating"
+        v-if="item.rating"
         :class="{
           'media-item__rating_green': normalizedRating >= 7,
           'media-item__rating_red': normalizedRating < 5,
@@ -11,18 +11,14 @@
       >
         {{ normalizedRating }}
       </span>
-      <img
-        class="media-item__img"
-        :src="mediaItem.posterPath"
-        :alt="mediaItem.name"
-      />
+      <img class="media-item__img" :src="item.posterPath" :alt="item.name" />
     </div>
     <div class="media-item__text-block">
-      <strong class="media-item__name">{{ mediaItem.name }}</strong>
+      <strong class="media-item__name">{{ item.name }}</strong>
       <div class="media-item__desc">
-        <span class="media-item__year">{{ mediaItem.release }}</span>
+        <span class="media-item__year">{{ item.release }}</span>
         <span>,&nbsp;</span>
-        <span class="media-item__genre">{{ mediaItem.genre }}</span>
+        <span class="media-item__genre">{{ item.genre }}</span>
       </div>
     </div>
   </RouterLink>
@@ -31,14 +27,14 @@
 <script>
 export default {
   props: {
-    mediaItem: {
+    item: {
       type: Object,
       required: true,
     },
   },
   computed: {
     normalizedRating() {
-      return this.mediaItem.rating.toFixed(1);
+      return this.item.rating.toFixed(1);
     },
   },
 };
@@ -106,7 +102,11 @@ export default {
   }
 
   &__img {
+    text-align: center;
+    vertical-align: middle;
+    background: vars.$gray;
     border-radius: 16px;
+    aspect-ratio: 2/3;
   }
 
   &__text-block {

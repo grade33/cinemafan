@@ -15,12 +15,8 @@
       :simulate-touch="false"
       class="slider__list"
     >
-      <SwiperSlide
-        v-for="mediaItem in mediaList"
-        :key="mediaItem.id"
-        class="slider__item"
-      >
-        <MediaItem :media-item="mediaItem" />
+      <SwiperSlide v-for="item in list" :key="item.id" class="slider__item">
+        <MediaItem :item="item" />
       </SwiperSlide>
       <button class="slider__btn slider__btn_prev">
         <ArrowRightIcon class="slider__btn-icon" />
@@ -53,7 +49,7 @@ export default {
       type: String,
       default: null,
     },
-    mediaList: {
+    list: {
       type: Array,
       required: true,
     },
@@ -73,7 +69,7 @@ export default {
 .slider {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 32px;
 
   &__title {
     @include mix.h2;
@@ -82,6 +78,8 @@ export default {
   &__list {
     width: 100%;
     height: auto;
+
+    // padding: 20px 0;
     overflow: visible;
 
     .swiper {
@@ -116,7 +114,7 @@ export default {
 
     &-icon {
       position: absolute;
-      top: 96px;
+      top: calc(50% - 58px);
       width: 42px;
       height: 42px;
       transition: transform 0.3s ease-in-out;
@@ -130,14 +128,14 @@ export default {
 
       svg {
         right: 0;
-        transform: rotate(180deg) translateY(-50%);
+        transform: translateY(-50%) rotate(180deg);
       }
 
       &:hover,
       &:focus-visible,
       &:active {
         svg {
-          transform: rotate(180deg) translateY(-50%) translateX(25%);
+          transform: translateY(-50%) translateX(-25%) rotate(180deg);
         }
       }
     }
@@ -150,14 +148,14 @@ export default {
 
       svg {
         left: 0;
-        transform: translateY(50%);
+        transform: translateY(-50%);
       }
 
       &:hover,
       &:focus-visible,
       &:active {
         svg {
-          transform: translateX(25%) translateY(50%);
+          transform: translateX(25%) translateY(-50%);
         }
       }
     }

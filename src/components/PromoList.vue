@@ -3,9 +3,10 @@
     <Swiper
       :modules="modules"
       :autoplay="{
-        delay: 5000,
+        delay: 8000,
         pauseOnMouseEnter: true,
       }"
+      :loop="true"
       :pagination="{
         clickable: true,
         el: '.promo__pagination',
@@ -19,12 +20,8 @@
       watch-slides-progress
       class="promo__slider"
     >
-      <SwiperSlide
-        v-for="promoItem in promoData"
-        :key="promoItem.id"
-        class="promo__item"
-      >
-        <PromoItem :media-item="promoItem" />
+      <SwiperSlide v-for="item in list" :key="item.id" class="promo__item">
+        <PromoItem :item="item" />
       </SwiperSlide>
 
       <div class="promo__pagination"></div>
@@ -38,10 +35,7 @@ import { Autoplay, Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import PromoItem from './PromoItem.vue';
-
-import { mapState } from 'pinia';
-import { useDataStore } from '@/stores/data.js';
+import PromoItem from '@/components/PromoItem.vue';
 
 export default {
   components: {
@@ -49,13 +43,16 @@ export default {
     SwiperSlide,
     PromoItem,
   },
+  props: {
+    list: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
       modules: [Pagination, Autoplay],
     };
-  },
-  computed: {
-    ...mapState(useDataStore, ['promoData']),
   },
 };
 </script>

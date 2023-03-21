@@ -14,12 +14,12 @@ import { mapActions } from 'pinia';
 import { useDataStore } from '@/stores/data.js';
 
 import {
-  getMoviesPopular,
-  getTvPopular,
+  getPopularLastYearMovies,
+  getPopularLastYearTv,
   getAnimatedMovies,
   getAnimatedTv,
-  getMoviesTopRated,
-  getTvTopRated,
+  getTopRatedMovies,
+  getTopRatedTv,
 } from '@/api/api.js';
 
 export default {
@@ -27,24 +27,20 @@ export default {
   data() {
     return {
       promoNames: {
-        movie: [],
-        tv: ['House of Dragon', 'Fear The Walking Dead'],
+        movie: ['Fight Club'],
+        tv: ['House of Dragon', 'Better Call Saul', 'Fear The Walking Dead'],
       },
     };
   },
   created() {
-    this.setMovies(getMoviesPopular, 'moviesPopular');
-    this.setTvShows(getTvPopular, 'tvPopular');
+    this.setMovies(getPopularLastYearMovies, 'popularMovies');
+    this.setTvShows(getPopularLastYearTv, 'popularTv');
 
-    this.setMovies(getAnimatedMovies, 'moviesAnimated');
-    this.setTvShows(getAnimatedTv, 'tvAnimated');
+    this.setMovies(getAnimatedMovies, 'animatedMovies');
+    this.setTvShows(getAnimatedTv, 'animatedTv');
 
-    this.setMovies(getMoviesTopRated, 'moviesTopRated');
-    this.setTvShows(getTvTopRated, 'tvTopRated');
-
-    this.setCatalog(getMoviesPopular, 'moviesCatalog');
-    this.setCatalog(getTvPopular, 'tvCatalog');
-
+    this.setMovies(getTopRatedMovies, 'topRatedMovies');
+    this.setTvShows(getTopRatedTv, 'topRatedTv');
     this.setPromo(this.promoNames);
   },
   methods: {

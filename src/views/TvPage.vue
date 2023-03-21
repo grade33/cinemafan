@@ -1,16 +1,15 @@
 <template>
-  <div class="movies">
-    <div class="container movies__container">
-      <div class="movies__catalog-block">
+  <div class="tv">
+    <div class="container tv__container">
+      <div class="tv__catalog-block">
         <CatalogComp
-          v-if="catalog.list && filtersList.length"
+          v-if="catalog.list"
           :list="catalog.list"
           :title="catalog.title"
-          :filters-list="filtersList"
           @change-page="changeCatalogPage"
         />
       </div>
-      <div class="movies__slides-block">
+      <div class="tv__slides-block">
         <template v-for="slider in slidesData" :key="slider.query">
           <SliderList
             v-if="slider.list"
@@ -29,57 +28,39 @@ import CatalogComp from '@/components/CatalogComp.vue';
 
 import { mapState, mapActions } from 'pinia';
 import { useDataStore } from '@/stores/data.js';
-import { getMovieGenres } from '../api/api';
 
 export default {
   components: { SliderList, CatalogComp },
-  data() {
-    return {
-      filtersList: [],
-    };
-  },
-
   computed: {
-    ...mapState(useDataStore, [
-      'animatedMovies',
-      'topRatedMovies',
-      'catalogMovies',
-    ]),
+    ...mapState(useDataStore, ['animatedTv', 'topRatedTv', 'catalogTv']),
 
     catalog() {
       return {
-        title: 'The Most Popular Films',
-        list: this.catalogMovies,
+        title: 'The Most Popular TV Shows',
+        list: this.catalogTv,
       };
     },
 
     slidesData() {
       return {
-        topRatedMovies: { title: 'Top Rated Films', list: this.animatedMovies },
-        animatedMovies: { title: 'Animated Films', list: this.topRatedMovies },
+        topRatedTv: { title: 'Top Rated TV Shows', list: this.animatedTv },
+        animatedTv: { title: 'Animated TV Shows', list: this.topRatedTv },
       };
     },
   },
   watch: {
     '$route.query.page': {
       handler: function (newPage) {
-        this.setCatalogMovies(newPage);
+        this.setCatalogTv(newPage);
       },
       immediate: true,
     },
   },
-  async created() {
-    const genres = {
-      title: 'Genres',
-      list: await getMovieGenres(),
-    };
-    this.filtersList.push(genres);
-  },
   methods: {
-    ...mapActions(useDataStore, ['setCatalogMovies']),
+    ...mapActions(useDataStore, ['setCatalogTv']),
 
     changeCatalogPage(page) {
-      this.setCatalogMovies(page);
+      this.setCatalogTv(page);
       this.$router.push({ query: { page } });
     },
   },
@@ -90,7 +71,7 @@ export default {
 @use '@/assets/scss/partials/mixins' as mix;
 @use '@/assets/scss/partials/variables' as vars;
 
-.movies {
+.tv {
   padding: 30px 0;
   padding-bottom: 120px;
   overflow: hidden;

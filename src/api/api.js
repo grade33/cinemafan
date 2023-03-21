@@ -26,6 +26,14 @@ function getFromApi(mediaType, querySettings = '') {
     });
 }
 
+export async function getMovieGenres() {
+  return (await getFromApi('/genre/movie/list')).genres;
+}
+
+export async function getTvGenres() {
+  return (await getFromApi('/genre/tv/list')).genres;
+}
+
 export async function getPromoMovie(name) {
   const id = (await getFromApi(`/search/movie`, { query: name, page: 1 }))
     .results[0].id;
@@ -45,7 +53,7 @@ export async function getPromoTv(name) {
   return Object.assign({}, movieData, creditsData);
 }
 
-export function getMoviesPopular(page = 1) {
+export function getAllPopularMovies(page = 1) {
   return getFromApi('/discover/movie', {
     page,
     'primary_release_date.gte': '2022-02-15',
@@ -54,25 +62,34 @@ export function getMoviesPopular(page = 1) {
     with_original_language: 'en',
   });
 }
-export function getMoviesTopRated(page = 1) {
+
+export function getPopularMovies(page = 1) {
   return getFromApi('/discover/movie', {
     page,
-    'vote_count.gte': '10000',
     without_genres: '16',
-    sort_by: 'vote_count.desc',
-    with_original_language: 'en',
-  });
-}
-export function getAnimatedMovies(page = 1) {
-  return getFromApi('/discover/movie', {
-    page,
-    'primary_release_date.gte': '2022-02-15',
-    with_genres: '16',
     sort_by: 'popularity.desc',
     with_original_language: 'en',
   });
 }
-export function getTvPopular(page = 1) {
+export function getPopularTv(page = 1) {
+  return getFromApi('/discover/tv', {
+    page,
+    with_status: '0',
+    without_genres: '16,10764,10763',
+    sort_by: 'popularity.desc',
+    with_original_language: 'en',
+  });
+}
+export function getPopularLastYearMovies(page = 1) {
+  return getFromApi('/discover/movie', {
+    page,
+    'primary_release_date.gte': '2022-02-15',
+    without_genres: '16',
+    sort_by: 'popularity.desc',
+    with_original_language: 'en',
+  });
+}
+export function getPopularLastYearTv(page = 1) {
   return getFromApi('/discover/tv', {
     page,
     with_status: '0',
@@ -82,12 +99,30 @@ export function getTvPopular(page = 1) {
     with_original_language: 'en',
   });
 }
-export function getTvTopRated(page = 1) {
+export function getTopRatedMovies(page = 1) {
+  return getFromApi('/discover/movie', {
+    page,
+    'vote_count.gte': '10000',
+    without_genres: '16',
+    sort_by: 'vote_count.desc',
+    with_original_language: 'en',
+  });
+}
+export function getTopRatedTv(page = 1) {
   return getFromApi('/discover/tv', {
     page,
     'vote_count.gte': '6000',
     without_genres: '16,10764,10763',
     sort_by: 'vote_average.desc',
+    with_original_language: 'en',
+  });
+}
+export function getAnimatedMovies(page = 1) {
+  return getFromApi('/discover/movie', {
+    page,
+    'primary_release_date.gte': '2022-02-15',
+    with_genres: '16',
+    sort_by: 'popularity.desc',
     with_original_language: 'en',
   });
 }
@@ -160,7 +195,7 @@ export function normalizePromoTv(rawTv) {
 }
 export async function normalizeListMovie(rawList) {
   const page = rawList.page;
-  const totalPages = rawList.total_pages;
+  const totalPages = rawList.total_pages > 500 ? 500 : rawList.total_pages;
 
   const tvGenreList = (await getFromApi('/genre/tv/list')).genres;
   const movieGenreList = (await getFromApi('/genre/movie/list')).genres;
@@ -172,7 +207,7 @@ export async function normalizeListMovie(rawList) {
     const release = new Date(rawItem.release_date).getFullYear();
     const genre = genreList.find((genre) => {
       return genre.id == rawItem.genre_ids[0];
-    }).name;
+    })?.name;
     const rating = rawItem.vote_average;
     const posterPath = apiPaths.imgSrc + apiPaths.imgW500 + rawItem.poster_path;
     return {
@@ -193,7 +228,7 @@ export async function normalizeListMovie(rawList) {
 }
 export async function normalizeListTv(rawList) {
   const page = rawList.page;
-  const totalPages = rawList.total_pages;
+  const totalPages = rawList.total_pages > 500 ? 500 : rawList.total_pages;
 
   const tvGenreList = (await getFromApi('/genre/tv/list')).genres;
   const movieGenreList = (await getFromApi('/genre/movie/list')).genres;
@@ -203,8 +238,9 @@ export async function normalizeListTv(rawList) {
     const id = rawItem.id;
     const name = rawItem.name;
     const release = new Date(rawItem.first_air_date).getFullYear();
-    const genre =
-      genreList.find((genre) => genre.id == rawItem.genre_ids[0])?.name || '';
+    const genre = genreList.find(
+      (genre) => genre.id == rawItem.genre_ids[0]
+    )?.name;
     const rating = rawItem.vote_average;
     const posterPath = apiPaths.imgSrc + apiPaths.imgW500 + rawItem.poster_path;
     return {

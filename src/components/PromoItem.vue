@@ -2,32 +2,32 @@
   <RouterLink to="/" class="promo-item">
     <div class="promo-item__content">
       <div class="promo-item__name-block">
-        <strong class="promo-item__name">{{ mediaItem.name }}</strong>
-        <p class="promo-item__overview">{{ mediaItem.overview }}</p>
+        <strong class="promo-item__name">{{ item.name }}</strong>
+        <p class="promo-item__overview">{{ item.overview }}</p>
       </div>
       <ul class="promo-item__structure">
         <li class="promo-item__structure-item">
           <span class="promo-item__structure-name">Cast: </span>
           <span class="promo-item__structure-content">
-            {{ mediaItem.cast }}
+            {{ item.cast }}
           </span>
         </li>
         <li class="promo-item__structure-item">
           <span class="promo-item__structure-name">Directed By: </span>
           <span class="promo-item__structure-content">
-            {{ mediaItem.director }}
+            {{ item.director }}
           </span>
         </li>
         <li class="promo-item__structure-item">
           <span class="promo-item__structure-name">Genre: </span>
           <span class="promo-item__structure-content">
-            {{ mediaItem.genres }}
+            {{ item.genres }}
           </span>
         </li>
       </ul>
     </div>
     <div class="promo-item__img-block">
-      <img class="promo-item__img" :src="mediaItem.backdropPath" alt="" />
+      <img class="promo-item__img" :src="item.backdropPath" alt="" />
     </div>
   </RouterLink>
 </template>
@@ -35,7 +35,7 @@
 <script>
 export default {
   props: {
-    mediaItem: {
+    item: {
       type: Object,
       required: true,
     },

@@ -1,13 +1,14 @@
 <template>
   <div class="home">
     <div class="container home__container">
-      <PromoList />
-      <div class="movies__slides-block">
-        <template v-for="media in mediaData" :key="media.query">
+      <PromoList v-if="promoList" :list="promoList" />
+
+      <div class="home__slides-block">
+        <template v-for="slider in slidesData" :key="slider.query">
           <SliderList
-            v-if="media.list"
-            :media-list="media.list"
-            :title="media.title"
+            v-if="slider.list"
+            :list="slider.list"
+            :title="slider.title"
           />
         </template>
       </div>
@@ -16,33 +17,33 @@
 </template>
 
 <script>
-import SliderList from '@/components/SliderList.vue';
-import PromoList from '../components/PromoList.vue';
-
 import { mapState } from 'pinia';
 import { useDataStore } from '@/stores/data.js';
+
+import SliderList from '@/components/SliderList.vue';
+import PromoList from '@/components/PromoList.vue';
 
 export default {
   components: { SliderList, PromoList },
   computed: {
     ...mapState(useDataStore, [
-      'moviesPopular',
-      'tvPopular',
-      'moviesAnimated',
-      'tvAnimated',
-      'moviesTopRated',
-      'tvTopRated',
-      'promoData',
+      'popularMovies',
+      'popularTv',
+      'animatedMovies',
+      'animatedTv',
+      'topRatedMovies',
+      'topRatedTv',
+      'promoList',
     ]),
 
-    mediaData() {
+    slidesData() {
       return {
-        moviesPopular: { title: 'Popular Films', list: this.moviesPopular },
-        tvPopular: { title: 'Popular TV Shows', list: this.tvPopular },
-        moviesAnimated: { title: 'Animated Films', list: this.moviesAnimated },
-        tvAnimated: { title: 'Animated TV Shows', list: this.tvAnimated },
-        moviesTopRated: { title: 'Top Rated Films', list: this.moviesTopRated },
-        tvTopRated: { title: 'Top Rated TV Shows', list: this.tvTopRated },
+        popularMovies: { title: 'Popular Films', list: this.popularMovies },
+        popularTv: { title: 'Popular TV Shows', list: this.popularTv },
+        animatedMovies: { title: 'Animated Films', list: this.animatedMovies },
+        animatedTv: { title: 'Animated TV Shows', list: this.animatedTv },
+        topRatedMovies: { title: 'Top Rated Films', list: this.topRatedMovies },
+        topRatedTv: { title: 'Top Rated TV Shows', list: this.topRatedTv },
       };
     },
   },
@@ -64,7 +65,7 @@ export default {
   &__slides-block {
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 30px;
   }
 }
 </style>

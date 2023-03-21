@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import {
+  getPopularMovies,
+  getPopularTv,
   getPromoMovie,
   getPromoTv,
   normalizeListMovie,
@@ -11,15 +13,15 @@ import {
 export const useDataStore = defineStore('data', {
   state: () => {
     return {
-      promoData: null,
-      moviesCatalog: null,
-      tvCatalog: null,
-      moviesPopular: null,
-      tvPopular: null,
-      moviesAnimated: null,
-      tvAnimated: null,
-      moviesTopRated: null,
-      tvTopRated: null,
+      promoList: null,
+      catalogMovies: null,
+      catalogTv: null,
+      popularMovies: null,
+      popularTv: null,
+      animatedMovies: null,
+      animatedTv: null,
+      topRatedMovies: null,
+      topRatedTv: null,
     };
   },
 
@@ -32,23 +34,36 @@ export const useDataStore = defineStore('data', {
       const rawList = await func();
       this[name] = (await normalizeListTv(rawList)).results;
     },
-    async setCatalog(func, name, page = 1) {
-      const catalogRawList = await func(page);
-      this[name] = await normalizeListMovie(catalogRawList);
+    async setCatalogMovies(page = 1) {
+      const catalogRawList = await getPopularMovies(page);
+      this.catalogMovies = await normalizeListMovie(catalogRawList);
+    },
+    async setCatalogTv(page = 1) {
+      const catalogRawList = await getPopularTv(page);
+      this.catalogTv = await normalizeListTv(catalogRawList);
     },
     setPromo(promoNames) {
-      this.promoData = [];
+      this.promoList = [];
 
-      promoNames.movie.forEach(async (name) => {
+      const moviePromises = promoNames.movie.map(async (name) => {
         const rawMovie = await getPromoMovie(name);
-        const movie = normalizePromoMovie(rawMovie);
-        this.promoData.push(movie);
+        console.log(rawMovie);
+        return normalizePromoMovie(rawMovie);
+      });
+      Promise.all(moviePromises).then((movieArr) => {
+        movieArr.forEach((movie) => {
+          this.promoList.push(movie);
+        });
       });
 
-      promoNames.tv.forEach(async (name) => {
+      const tvPromises = promoNames.tv.map(async (name) => {
         const rawTv = await getPromoTv(name);
-        const tv = normalizePromoTv(rawTv);
-        this.promoData.push(tv);
+        return normalizePromoTv(rawTv);
+      });
+      Promise.all(tvPromises).then((tvArr) => {
+        tvArr.forEach((tv) => {
+          this.promoList.push(tv);
+        });
       });
     },
   },
